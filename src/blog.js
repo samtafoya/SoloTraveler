@@ -1,12 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Blog from './App';
-import * as serviceWorker from './serviceWorker';
-
-ReactDOM.render(<Blog />, document.getElementById('blog'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import React from 'react'
+class Blog extends React.Component {
+  render() {
+    return <h1>Blog</h1>
+  }
+}
+export default Blog
