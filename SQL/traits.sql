@@ -13,9 +13,12 @@ USE solotravelertest;
 ); */
 /**/
 # INSERT DATA HERE
+UPDATE traits
+SET trait = 'stay', trait_id = 'travel', category = '1', category_id = '3'
+WHERE id = 1;
 
-SET @tr = 'travel';
-SET @tid = '1';
+
+/*SET @tid = '1';
 SET @cg = 'travel';
 SET @cid = '1';
 INSERT INTO traits
@@ -30,6 +33,6 @@ SET @cid = '1';
 INSERT INTO traits
 	(trait, trait_id, category, category_id) 
 	VALUES
-    (@tr,    @tid, 	  @cg,		@cid);
+    (@tr,    @tid, 	  @cg,		@cid);*/
 
     

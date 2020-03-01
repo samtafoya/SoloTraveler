@@ -22,7 +22,7 @@ CREATE TABLE account (
 */
 
 # INSERT DATA HERE
-/**
+
 SET @fn = 'Sammi';
 SET @ln = 'Tafoya';
 INSERT INTO account
@@ -45,6 +45,4 @@ SET @age = 19;
 SET @pwd = 'fdsfieif';
 INSERT INTO account (first_name, last_name, email, age, pass_word, create_time) VALUES
     (@fn, @ln, @email, @age, @pwd, NOW());
-
-*/
 

@@ -13,13 +13,25 @@ const connection = mysql.createConnection({
     database: 'solotravelertest'
 });
 
+// this doesnt work
+// Listen to POST requests to /users.
+app.post('/users', function(req, res) {
+    // Get sent data.
+    var user = req.body;
+    // Do a MySQL query.
+    var query = connection.query('INSERT INTO users SET ?', user, function(err, result) {
+      // Neat!
+    });
+    res.end('Success');
+  });
+
 /*connection.connect(function(err){
     (err)? console.log(err): console.log(connection);
 });*/
 
-connection.connect();
+/* connection.connect();
 
-connection.query('SELECT * from account',
+connection.query('SELECT * from traits',
     function (err, rows, fields) {
         if (err) {
             console.log(err);
@@ -28,7 +40,7 @@ connection.query('SELECT * from account',
         console.log('The reponse is: ', rows);
   });
   
-connection.end();
+connection.end(); */
 
 //require('./routes.js')(app);
 

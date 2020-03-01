@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import './index.css'
+import './css/index.css'
 import App from './App'
-import Blog from './blog'
-import Chat from './chat'
-import ValidatedLoginForm from './ValidatedLoginForm'
+import Blog from './views/blog'
+import Chat from './views/chat'
+import SignUp from './views/signup'
+import ValidatedLoginForm from './views/ValidatedLoginForm'
 
 const routing = (
     <Router>
@@ -28,6 +29,7 @@ const routing = (
         <Route path="/blog" component={Blog} />
         <Route path="/chat" component={Chat} />
         <Route path="/login" component={ValidatedLoginForm} />
+        
       </div>
     </Router>
   )
