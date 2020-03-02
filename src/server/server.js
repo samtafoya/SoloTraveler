@@ -6,32 +6,62 @@ const PORT = process.env.PORT || 3000;
 // initialize app
 const app = express();
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'solotravelertest'
+/**/
+var urlGetHello = "/api/hello";
+app.get(urlGetHello, (req, res) => {
+    var str = urlGetHello + " (GET) " + "just called";
+    console.log(str);
+    res.send({express: str});
 });
 
 // this doesnt work
 // Listen to POST requests to /users.
-app.post('/users', function(req, res) {
+var urlGetUsers = "/api/users";
+app.get(urlGetUsers, (req, res) => {
+    var str = urlGetUsers + " (GET) just called...";
+    console.log(str);
+    res.send({express: str});
+});
+
+var urlGetUser = "/api/user";   // <-- Notice SINGULAR verb
+app.post(urlGetUser, function(req, res) {
     // Get sent data.
     var user = req.body;
     // Do a MySQL query.
-    var query = connection.query('INSERT INTO users SET ?', user, function(err, result) {
-      // Neat!
-    });
-    res.end('Success');
-  });
+    //var query = connection.query('INSERT INTO users SET ?', user, function(err, result) {
+    var str = urlGetUser + " (POST) " + "just called";
+    console.log(str);
+    res.send({express: str});
+});
+/**/
 
-/*connection.connect(function(err){
+// start server
+app.listen(PORT, () => {
+    console.log('App running on port ' + PORT);
+});
+
+/**
+connection.connect(function(err){
     (err)? console.log(err): console.log(connection);
-});*/
+});
+**/
 
-/* connection.connect();
+/**/
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    //password: 'password',
+    password: 'root',
+    database: 'solotravelertest',
+    //insecureAuth : true,
+});
 
-connection.query('SELECT * from traits',
+connection.connect();
+
+var sqlString = "SELECT * FROM account";
+//var sqlString = "SELECT * FROM traits";
+//var sqlString = "UPDATE traits SET ...";
+connection.query(sqlString,
     function (err, rows, fields) {
         if (err) {
             console.log(err);
@@ -40,13 +70,9 @@ connection.query('SELECT * from traits',
         console.log('The reponse is: ', rows);
   });
   
-connection.end(); */
+connection.end();
+/**/
 
 //require('./routes.js')(app);
-
-// start server
-app.listen(PORT, () => {
-    console.log('App running on port ' + PORT);
-})
 
 //module.exports = connection;
