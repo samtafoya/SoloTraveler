@@ -4,8 +4,8 @@ CREATE TABLE traits (
 
 	-- parent_id int(11) NULL,			-- FK
 
-	trait varchar(32) NOT NULL,
-	trait_id varchar(3) NOT NULL,
+	first_name varchar(32) NOT NULL,
+	last_account varchar(3) NOT NULL,
 	category varchar(32) NOT NULL,
 	category_id int(3) NOT NULL,
 
