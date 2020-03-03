@@ -61,7 +61,11 @@ class App extends Component {
           <p>
             <strong>post to server:</strong>
           </p>
-          <input type="text" value={this.state.post} onChange={e => this.setState({post: e.target.value})} />
+          <input
+            type="text"
+            value={this.state.post}
+            onChange={e => this.setState({ post: e.target.value })}
+          />
           <button type="submit">submit</button>
         </form>
         <p>{this.state.responseToPost}</p>
