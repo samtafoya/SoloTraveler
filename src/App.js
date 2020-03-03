@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 
 class App extends Component {
   // State for passing data around
-  state = {
-    response: '',
-    post: '',
-    responseToPost: '',
-  };
+  constructor(props) {
+    super(props)
 
-  // event handler implementation
+    this.state = {
+      response: '',
+      post: '',
+      responseToPost: '',
+    };
+  }
+  
+// event handler implementation
   componentDidMount() {
     console.log("calling this.callApi()");
     this.callApi()
@@ -22,6 +26,7 @@ class App extends Component {
     var urlHello = "/api/users";
     const response = await fetch(urlHello);
     const body = await response.json();
+    var test = JSON.parse(body);
     if (response.status === 200) {
       console.log("callApi() succeeded");
     }
@@ -29,7 +34,7 @@ class App extends Component {
       var errMsg = "ERROR: callApi() failed: (response.status===" + response.status + ") " + body.message;
       throw Error(errMsg);
     }
-    return body;
+    return test;
   };
 
   // Implementation of the postback for the submit button click
@@ -39,13 +44,19 @@ class App extends Component {
     var submitUrl = "/api/user";
     const response = await fetch(submitUrl, {
       method: 'POST',
+      
+      // need these headers for post
       headers: {
         'Content-Type': 'application/json',
       },
+
+      // thing entered in the form
       body: JSON.stringify( {post: this.state.post} ),
     });
 
     const body = await response.text();
+
+    var test = JSON.parse(body);
 
     this.setState( {responseToPost: body} );
   };
