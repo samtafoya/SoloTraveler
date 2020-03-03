@@ -55,9 +55,9 @@ connection.connect();
 var urlGetUser = "/api/user";   // <-- Notice SINGULAR verb
 app.post(urlGetUser, function (req, res) {
     // Get sent data.
-    var user = req.body;
+    var user = req.body.post;
     // Do a MySQL query.
-    var query = mysql.format('INSERT INTO account VALUES (11, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+    var query = mysql.format('INSERT INTO account VALUES (12, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
 
     var test = mysql.format('INSERT INTO account SET ?', user);
 
@@ -70,7 +70,8 @@ app.post(urlGetUser, function (req, res) {
     });
 
     var str = urlGetUser + " (POST) " + "just called " + req.body;
-    console.log(JSON.parse(user));
+    //console.log(JSON.parse(user));
+    console.log(user);
     res.send({ express: str });
 });
 
