@@ -1,11 +1,12 @@
 import React from 'react'
+import '/Users/sammitafoya/SoloTraveler/src/css/text.css'
+
 class Blog extends React.Component {
   render() {
     return (
       <div>
         <div>
-          <h1>TEST</h1>
-          <a href="#" class="navbar-brand">Bootsbook</a>
+          <h1>MY FEED</h1>
         </div>
 
         <div class="card-header">

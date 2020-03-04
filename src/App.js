@@ -23,7 +23,7 @@ class App extends Component {
   // Implementation of the "callApi" function called above
   callApi = async() => {
     console.log("inside callApi()");
-    var urlHello = "/api/users";
+    var urlHello = "/api/user";
     const response = await fetch(urlHello);
     const body = await response.json();
     var test = JSON.parse(body);

@@ -3,8 +3,6 @@ const mysql = require('mysql');
 
 const PORT = process.env.PORT || 3000;
 
-//conncection .connect inside connection.app post then connection.end after that
-
 // https://hashnode.com/post/how-can-use-react-js-node-js-mysql-together-cjdlfbukh01vqn9wuaucmng6h/
 
 // initialize app
@@ -24,6 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
 /**/
 var urlGetHello = "/api/hello";
 app.get(urlGetHello, (req, res) => {
@@ -32,34 +31,46 @@ app.get(urlGetHello, (req, res) => {
     res.send({ express: str });
 });
 
-// this doesnt work
-// Listen to POST requests to /users.
-var urlGetUsers = "/api/users";
-app.get(urlGetUsers, (req, res) => {
-    var str = urlGetUsers + " (GET) just called...";
-    console.log(str);
-    res.send({ express: str });
-});
-
-/*app.post('/api/user', (req, res) => {
-    connection.connect();
-    console.log(req.body);
-    res.send(
-     // `I received your POST request. This is what you sent me: ${req.body.post}`,
-     "hello"
-    );
-  });*/
-
+var idCount = 9;
 connection.connect();
 
 var urlGetUser = "/api/user";   // <-- Notice SINGULAR verb
 app.post(urlGetUser, function (req, res) {
+
     // Get sent data.
     var user = req.body.post;
-    // Do a MySQL query.
-    var query = mysql.format('INSERT INTO account VALUES (12, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+    idCount++;
 
-    var test = mysql.format('INSERT INTO account SET ?', user);
+    // Do a MySQL query.
+    var query = mysql.format('INSERT INTO account VALUES ("' + idCount + '", ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+    //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
+
+    connection.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+
+        //console.log('The reponse is: ', user);
+    });
+
+    //var str = urlGetUser + " (POST) " + "just called " + req.body;
+    var str = "Logged In!"
+    //console.log(JSON.parse(user));
+    console.log(user);
+    res.send({ express: str });
+});
+
+var urlGetLogin = "/api/login";   // <-- Notice SINGULAR verb
+app.post(urlGetLogin, function (req, res) {
+
+    // Get sent data.
+    var user = req.body.post;
+    idCount++;
+
+    // Do a MySQL query.
+    var query = mysql.format('INSERT INTO account VALUES ("' + idCount + '", ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+
+    //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
 
     connection.query(query, function (err, result) {
         if (err) {
@@ -75,8 +86,21 @@ app.post(urlGetUser, function (req, res) {
     res.send({ express: str });
 });
 
-//connection.end();
-/**/
+var urlGetUser = "/api/trait";   // <-- Notice SINGULAR verb
+app.post(urlGetUser, function (req, res) {
+    var sqlString = "SELECT * FROM traits";
+    connection.query(sqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log('The reponse is: ', rows);
+        });
+
+    console.log(req.body.first_name);
+    console.log(req.body.post);
+});
 
 // start server
 app.listen(PORT, () => {
