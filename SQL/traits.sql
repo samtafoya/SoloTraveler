@@ -1,4 +1,9 @@
 USE solotravelertest;
+
+UPDATE solotravelertest.traits
+SET trait = 'test'
+WHERE id = 1;
+
 /*CREATE TABLE traits (
 	id int(11) NOT NULL AUTO_INCREMENT,
 
@@ -12,16 +17,13 @@ USE solotravelertest;
 	PRIMARY KEY (id)
 ); */
 /**/
-# INSERT DATA HERE
-UPDATE traits
-SET trait = 'stay', trait_id = 'travel', category = '1', category_id = '3'
-WHERE id = 1;
+# INSERT DATA HERE	
 
 
 /*SET @tid = '1';
 SET @cg = 'travel';
 SET @cid = '1';
-INSERT INTO traits
+INSERT INTO traitssys_configsys_configsys_config
 	(trait, trait_id, category, category_id) 
 	VALUES
     (@tr,    @tid, 	  @cg,		@cid);
