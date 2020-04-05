@@ -25,7 +25,7 @@ const routing = (
             <Link to="/login">Login</Link>
           </li>
         </ul>
-        <Route exact path="/" component={App} />
+        <Route exact path="/" component={Blog} />
         <Route path="/blog" component={Blog} />
         <Route path="/chat" component={Chat} />
         <Route path="/login" component={ValidatedLoginForm} />

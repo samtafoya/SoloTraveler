@@ -1,13 +1,13 @@
 USE solotravelertest;
-CREATE TABLE traits (
+CREATE TABLE users (
 	id int(11) NOT NULL AUTO_INCREMENT,
 
 	-- parent_id int(11) NULL,			-- FK
 
-	first_name varchar(32) NOT NULL,
-	last_account varchar(3) NOT NULL,
-	category varchar(32) NOT NULL,
-	category_id int(3) NOT NULL,
+	traits int(32) NOT NULL, /* maybe an array later */
+	ratings int(3) NOT NULL,
+	friends int(32) NOT NULL,
+	group_number int(3) NOT NULL,
 
 	PRIMARY KEY (id)
 );

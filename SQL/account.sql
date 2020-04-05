@@ -1,6 +1,6 @@
 USE solotravelertest;
 
-/*
+/**
 DROP TABLE IF EXISTS person;
 
 CREATE TABLE account (
@@ -19,7 +19,9 @@ CREATE TABLE account (
 
 	PRIMARY KEY (id)
 );
-*/
+**/
+
+/**/
 
 # INSERT DATA HERE
 
@@ -45,4 +47,6 @@ SET @age = 19;
 SET @pwd = 'fdsfieif';
 INSERT INTO account (first_name, last_name, email, age, pass_word, create_time) VALUES
     (@fn, @ln, @email, @age, @pwd, NOW());
+
+/**/
 
