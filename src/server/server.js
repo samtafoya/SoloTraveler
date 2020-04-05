@@ -23,6 +23,9 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+//              CODE FOR SIGN INS
+/*---------------------------------------------------------------------------*/
+
 /**/
 var urlGetHello = "/api/hello";
 app.get(urlGetHello, (req, res) => {
@@ -60,7 +63,7 @@ app.post(urlGetUser, function (req, res) {
     res.send({ express: str });
 });
 
-var urlGetLogin = "/api/login";   // <-- Notice SINGULAR verb
+var urlGetLogin = "/api/login";   // <-- Being used in ValidatedLoginForm.js
 app.post(urlGetLogin, function (req, res) {
 
     // Get sent data.
@@ -68,7 +71,7 @@ app.post(urlGetLogin, function (req, res) {
     idCount++;
 
     // Do a MySQL query.
-    var query = mysql.format('INSERT INTO account VALUES ("' + idCount + '", ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+    var query = mysql.format('INSERT INTO account VALUES (97, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
 
     //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
 
@@ -86,6 +89,12 @@ app.post(urlGetLogin, function (req, res) {
     res.send({ express: str });
 });
 
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR TRAITS
+
+/*---------------------------------------------------------------------------*/
+
 var urlGetUser = "/api/trait";   // <-- Notice SINGULAR verb
 app.post(urlGetUser, function (req, res) {
     var sqlString = "SELECT * FROM traits";
@@ -101,6 +110,42 @@ app.post(urlGetUser, function (req, res) {
     console.log(req.body.first_name);
     console.log(req.body.post);
 });
+
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR BLOGS
+
+/*---------------------------------------------------------------------------*/
+
+var urlGetBlog = "/api/blog";   // <-- Being used in blog.js
+app.post(urlGetBlog, function (req, res) {
+
+    // Get sent data.
+    var blog = req.body.blogText;
+
+    // Do a MySQL query.
+    var query = mysql.format('INSERT INTO blogs VALUES ("user", "name5", ?)', blog);
+
+    //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
+
+    connection.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+    });
+
+    var str = urlGetBlog + " (POST) " + "just called " + req.body;
+    //console.log(JSON.parse(user));
+    console.log(str);
+    console.log(blog);
+    res.send({ express: req.body.blogText });
+});
+
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR SERVER
+
+/*---------------------------------------------------------------------------*/
 
 // start server
 app.listen(PORT, () => {

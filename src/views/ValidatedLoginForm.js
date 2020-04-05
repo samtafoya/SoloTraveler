@@ -26,14 +26,15 @@ class ValidatedLoginForm extends Component {
   callApi = async () => {
     console.log("inside callApi()");
     var urlGetTrait = "/api/login";
-    const response = await fetch(urlGetTrait);
-    const body = await response.json();
+    const responseT = await fetch(urlGetTrait);
+    const body = await responseT.json();
     var test = JSON.parse(body);
-    if (response.status === 200) {
+    if (responseT.status === 200) {
       console.log("callApi() succeeded");
     }
     else {
-      var errMsg = "ERROR: callApi() failed: (response.status===" + response.status + ") " + body.message;
+      console.log("callApi() failed");
+      var errMsg = "ERROR: callApi() failed: (response.status===" + responseT.status + ") " + body.message;
       throw Error(errMsg);
     }
     return test;

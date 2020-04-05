@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '/Users/sammitafoya/SoloTraveler/src/css/text.css'
 
 class Blog extends React.Component {
@@ -8,26 +8,111 @@ class Blog extends React.Component {
 
     this.state = {
       blogText: "",
-      textAreaVal: "test",
-      new: " ",
-      word: " "
+      textAreaVal: "",
+      isVisible: false,
+      postList: [],
+      count: 0
     }
   }
 
+  // event handler implementation
+  componentDidMount() {
+    console.log("calling this.callApi()");
+    this.callApi()
+      .then(res => this.setState({ textAreaVal: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  // Implementation of the "callApi" function called above
+  callApi = async () => {
+    console.log("inside callApi()");
+    var urlGetBlog = "/api/blog";
+    const response = await fetch(urlGetBlog);
+    const body = await response.json();
+    var test = JSON.parse(body);
+    if (response.status === 200) {
+      console.log("callApi() succeeded");
+    }
+    else {
+      var errMsg = "ERROR: callApi() failed: (response.status===" + response.status + ") " + body.message;
+      throw Error(errMsg);
+    }
+    return body;
+  };
+
+  // Implementation of the postback for the submit button click
+  handleSubmit = async e => {
+    e.preventDefault();
+
+    var submitUrl = "/api/blog";
+    const response = await fetch(submitUrl, {
+      method: 'POST',
+
+      // need these headers for post
+      headers: {
+        'Content-Type': 'application/json',
+      },
+
+      // maybe add these to an array and then call each index
+      // thing entered in the form
+      body: JSON.stringify({ blogText: this.state.textAreaVal }),
+      //body: JSON.stringify({first_name: this.state.first_name}),
+    });
+
+    this.setState({ blogText: this.state.textAreaVal });
+
+    const body = await response.text();
+
+    this.setState({ blogText: this.state.textAreaVal });
+
+    console.log(body);
+    console.log(this.state.blogText);
+  };
+
   // updates the blog post
-  handleChange = (e) => {  
+  handleChange = (e) => {
     this.setState({
       textAreaVal: e.target.value
     });
+    this.setState({ count: 1 });
   }
 
   // submits the post
   publishPost = () => {
-    alert('The link was clicked.');
     this.setState({ blogText: this.state.textAreaVal });
+    this.setState({ isVisible: true });
+
+    // fix key, count isnt working
+    let newList = this.state.postList.concat(
+      <div key={this.state.count} >
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="ml-2">
+                <div class="h5 m-0">@samtafoya</div>
+                <div class="h7 text-muted">Sammi Tafoya</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{this.state.textAreaVal}</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+          <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+          <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+        </div>
+      </div>);
+    this.setState({ postList: newList });
   }
 
   render() {
+
+    // figure out how to keep them on there, learn to pull from db on refresh
+
+    const postList = this.state.postList;
+
     return (
       <div>
         <div>
@@ -61,41 +146,7 @@ class Blog extends React.Component {
           </div>
         </div>
 
-        <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="ml-2">
-                <div class="h5 m-0">@samtafoya</div>
-                <div class="h7 text-muted">Sammi Tafoya</div>
-              </div>
-            </div>
-            <div>
-              <div class="dropdown">
-                <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-ellipsis-h"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                  <div class="h6 dropdown-header">Actions</div>
-                  <a class="dropdown-item" href="#">Save </a>
-                  <a class="dropdown-item" href="#">Hide </a>
-                  <a class="dropdown-item" href="#">Report</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
-          <p class="card-text">{this.state.blogText}</p>
-        </div>
-
-        <div class="card-footer">
-          <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-          <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-          <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-        </div>
+        {postList}
 
       </div>
     );
