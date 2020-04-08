@@ -33,7 +33,7 @@ class Suggest extends Component {
     handleSubmit = async e => {
         console.log("Inside Suggest.handleSubmit")
         e.preventDefault();
-        
+
         this.callApi()
             .then(res => {
                 console.log("Hello: Inside 'handleSubmit.then'");
@@ -43,10 +43,13 @@ class Suggest extends Component {
 
                 for (var i in res) {
                     result = JSON.stringify(res[i]);
-                    resultList.push(result);
+                    let front = result.indexOf(":") + 2;
+                    let back = result.length - 2;
+                    let newSub = result.substring(front, back);
+                    resultList.push(newSub + "\n");
                 }
 
-                this.setState({userList: resultList});
+                this.setState({ userList: resultList });
             })
             .catch(err => {
                 console.log("Hello: Inside 'handleSubmit.catch'")
@@ -55,10 +58,15 @@ class Suggest extends Component {
     };
 
     render() {
-        
+        let newList = this.state.userList;
         return (<div>
             <button onClick={this.handleSubmit}>get users</button>
-            <p> Here is a list of similar users:  {this.state.userList}</p>
+            <p> Here is a list of similar users:  </p>
+            <div>
+                {newList.map(function (u, idx) {
+                    return (<p key={idx}>{u}</p>)
+                })}
+            </div>
         </div>)
     }
 
