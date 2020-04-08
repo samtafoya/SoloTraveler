@@ -61,7 +61,7 @@ class ValidatedLoginForm extends Component {
 
     const body = await response.text();
 
-    this.setState({ responseToPost: body});
+    this.setState({ responseToPost: body });
   };
 
   render() {

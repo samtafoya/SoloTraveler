@@ -65,8 +65,29 @@ class Blog extends React.Component {
 
     this.setState({ blogText: this.state.textAreaVal });
 
-    console.log(body);
-    console.log(this.state.blogText);
+    // fix key, count isnt working
+    let newList = this.state.postList.concat(
+      <div key={this.state.count} >
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="ml-2">
+                <div class="h5 m-0">@samtafoya</div>
+                <div class="h7 text-muted">Sammi Tafoya</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{this.state.textAreaVal}</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+          <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+          <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+        </div>
+      </div>);
+    this.setState({ postList: newList });
   };
 
   // updates the blog post
@@ -141,7 +162,7 @@ class Blog extends React.Component {
 
           <div class="btn-toolbar justify-content-between">
             <div class="btn-group">
-              <button onClick={this.publishPost} type="submit" class="btn btn-primary">Submit</button>
+              <button onClick={this.handleSubmit} type="submit" class="btn btn-primary">Submit</button>
             </div>
           </div>
         </div>

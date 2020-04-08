@@ -23,7 +23,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+/*---------------------------------------------------------------------------*/
+
 //              CODE FOR SIGN INS
+
 /*---------------------------------------------------------------------------*/
 
 /**/
@@ -73,8 +76,6 @@ app.post(urlGetLogin, function (req, res) {
     // Do a MySQL query.
     var query = mysql.format('INSERT INTO account VALUES (97, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
 
-    //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
-
     connection.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -96,8 +97,8 @@ app.post(urlGetLogin, function (req, res) {
 /*---------------------------------------------------------------------------*/
 
 var urlGetUser = "/api/trait";   // <-- Notice SINGULAR verb
-app.post(urlGetUser, function (req, res) {
-    var sqlString = "SELECT * FROM traits";
+app.get(urlGetUser, (req, res) => {
+    var sqlString = "SELECT trait FROM traits";
     connection.query(sqlString,
         function (err, rows, fields) {
             if (err) {
@@ -105,10 +106,12 @@ app.post(urlGetUser, function (req, res) {
             }
 
             console.log('The reponse is: ', rows);
-        });
+            var jString = JSON.stringify(rows);
 
-    console.log(req.body.first_name);
-    console.log(req.body.post);
+            //res.send({ traitsRows: rows });
+            //res.json({ traitsRows: rows });
+            res.send(JSON.parse(jString));
+        });
 });
 
 /*---------------------------------------------------------------------------*/
@@ -139,6 +142,50 @@ app.post(urlGetBlog, function (req, res) {
     console.log(str);
     console.log(blog);
     res.send({ express: req.body.blogText });
+});
+
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR USERS
+
+/*---------------------------------------------------------------------------*/
+
+/*
+var urlSug = "/api/users";   
+app.get(urlSug, function (req, res) {
+    var sqlString = "SELECT * FROM users";
+
+    connection.query(sqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+            req.body.match = rows;
+            console.log('The reponse is: ', rows);
+        });
+
+        return req.body;
+    //console.log(req.body.first_name);
+   // console.log(req.body.post);
+});
+*/
+
+var urlGetUser = "/api/users";  
+app.get(urlGetUser, (req, res) => {
+    var sqlString = "SELECT name FROM users";
+    connection.query(sqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log('The reponse is: ', rows);
+            var jString = JSON.stringify(rows);
+
+            //res.send({ traitsRows: rows });
+            //res.json({ traitsRows: rows });
+            res.send(JSON.parse(jString));
+        });
 });
 
 /*---------------------------------------------------------------------------*/
@@ -178,5 +225,4 @@ connection.end(); */
 /**/
 
 //require('./routes.js')(app);
-
 //module.exports = connection;
