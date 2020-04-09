@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ValidatedLoginForm from './ValidatedLoginForm';
 import Suggest from './suggest';
 import Blog from './blog';
-import '/Users/sammitafoya/SoloTraveler/src/css/styles.css'
+//import '/Users/sammitafoya/SoloTraveler/src/css/styles.css'
 
 
 class Test extends Component {
