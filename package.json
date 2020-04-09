@@ -1,6 +1,7 @@
 {
   "name": "solotravel",
   "version": "0.1.0",
+  "main": "index.js",
   "private": true,
   "proxy": "http://localhost:3000",
   "dependencies": {
