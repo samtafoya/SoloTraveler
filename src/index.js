@@ -8,11 +8,18 @@ import Suggest from './views/suggest'
 import Chat from './views/chat'
 import SignUp from './views/signup'
 import ValidatedLoginForm from './views/ValidatedLoginForm'
+import Test from './views/test'
 
-const routing = (
-    <Router>
-      <div>
-        <ul>
+function requireAuth(nextState, replace) {
+  /*if (!loggedIn()) {
+    replace({
+      pathname: '/test'
+    })
+  }*/
+}
+
+/*
+<ul className="wrap">
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -26,13 +33,25 @@ const routing = (
             <Link to="/login">Login</Link>
           </li>
         </ul>
-        <Route exact path="/" component={Blog} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/suggest" component={Suggest} />
-        <Route path="/login" component={ValidatedLoginForm} />
-        
-      </div>
-    </Router>
-  )
+*/
 
-  ReactDOM.render(routing, document.getElementById('root'))
+const routing = (
+  <Router>
+    <div>
+      <div class="nav">
+        <Link class="wrap" to="/">Home</Link>
+        <Link class="wrap" to="/blog">Blog</Link>
+        <Link class="wrap" to="/suggest">Suggestions</Link>
+        <Link class="wrap" to="/login">Login</Link>
+      </div>
+      <Route exact path="/" component={Blog} />
+      <Route path="/blog" component={Blog} />
+      <Route path="/suggest" component={Suggest} />
+      <Route path="/login" component={ValidatedLoginForm} />
+      <Route path="/test" component={Test} />
+
+    </div>
+  </Router>
+)
+
+ReactDOM.render(routing, document.getElementById('root'))

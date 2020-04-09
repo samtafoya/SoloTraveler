@@ -23,13 +23,6 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-/*---------------------------------------------------------------------------*/
-
-//              CODE FOR SIGN INS
-
-/*---------------------------------------------------------------------------*/
-
-/**/
 var urlGetHello = "/api/hello";
 app.get(urlGetHello, (req, res) => {
     var str = urlGetHello + " (GET) " + "just called";
@@ -37,68 +30,42 @@ app.get(urlGetHello, (req, res) => {
     res.send({ express: str });
 });
 
-var idCount = 9;
-connection.connect();
+/*---------------------------------------------------------------------------*/
 
-var urlGetUser = "/api/user";   // <-- Notice SINGULAR verb
-app.post(urlGetUser, function (req, res) {
+//              CODE FOR SIGN INS
 
-    // Get sent data.
-    var user = req.body.post;
-    idCount++;
-
-    // Do a MySQL query.
-    var query = mysql.format('INSERT INTO account VALUES ("' + idCount + '", ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
-    //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
-
-    connection.query(query, function (err, result) {
-        if (err) {
-            console.log(err);
-        }
-
-        //console.log('The reponse is: ', user);
-    });
-
-    //var str = urlGetUser + " (POST) " + "just called " + req.body;
-    var str = "Logged In!"
-    //console.log(JSON.parse(user));
-    console.log(user);
-    res.send({ express: str });
-});
+/*---------------------------------------------------------------------------*/
 
 var urlGetLogin = "/api/login";   // <-- Being used in ValidatedLoginForm.js
 app.post(urlGetLogin, function (req, res) {
 
     // Get sent data.
-    var user = req.body.post;
-    idCount++;
+    var email = req.body.post;
+    var pass_word = req.body.pass;
 
-    // Do a MySQL query.
-    var query = mysql.format('INSERT INTO account VALUES (97, ?, "test", "test", 19, "test", CURRENT_TIMESTAMP)', user);
+    console.log(pass_word);
+
+    var sql = 'INSERT INTO account (email, pass_word, first_name, last_name, age, loggedin) VALUES (?)';
+    var values = [email, pass_word, req.body.first_name, req.body.last_name, req.body.age, true];
+
+    // Do a MySQL query for email.
+    var query = mysql.format(sql, [values]);
 
     connection.query(query, function (err, result) {
         if (err) {
             console.log(err);
         }
 
-        //console.log('The reponse is: ', user);
     });
 
-    var str = urlGetUser + " (POST) " + "just called " + req.body;
-    //console.log(JSON.parse(user));
-    console.log(user);
+    var str = urlGetUser + " (POST) " + "just called " + JSON.stringify(req.body);
+    console.log(email);
     res.send({ express: str });
 });
 
-/*---------------------------------------------------------------------------*/
-
-//                  CODE FOR TRAITS
-
-/*---------------------------------------------------------------------------*/
-
-var urlGetUser = "/api/trait";   // <-- Notice SINGULAR verb
+var urlGetUser = "/api/getLogged";
 app.get(urlGetUser, (req, res) => {
-    var sqlString = "SELECT trait FROM traits";
+    var sqlString = "SELECT first_name FROM account";
     connection.query(sqlString,
         function (err, rows, fields) {
             if (err) {
@@ -108,8 +75,28 @@ app.get(urlGetUser, (req, res) => {
             console.log('The reponse is: ', rows);
             var jString = JSON.stringify(rows);
 
-            //res.send({ traitsRows: rows });
-            //res.json({ traitsRows: rows });
+            res.send(JSON.parse(jString));
+        });
+});
+
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR TRAITS
+
+/*---------------------------------------------------------------------------*/
+
+var urlGetUser = "/api/trait";
+app.get(urlGetUser, (req, res) => {
+    var sqlString = "SELECT * FROM traits";
+    connection.query(sqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log('The reponse is: ', rows);
+            var jString = JSON.stringify(rows);
+
             res.send(JSON.parse(jString));
         });
 });
@@ -126,6 +113,8 @@ app.post(urlGetBlog, function (req, res) {
     // Get sent data.
     var blog = req.body.blogText;
 
+    // figure out how to determine if someone is logged in
+
     // Do a MySQL query.
     var query = mysql.format('INSERT INTO blogs VALUES ("user", "name5", ?)', blog);
 
@@ -138,41 +127,14 @@ app.post(urlGetBlog, function (req, res) {
     });
 
     var str = urlGetBlog + " (POST) " + "just called " + req.body;
-    //console.log(JSON.parse(user));
     console.log(str);
     console.log(blog);
     res.send({ express: req.body.blogText });
 });
 
-/*---------------------------------------------------------------------------*/
-
-//                  CODE FOR USERS
-
-/*---------------------------------------------------------------------------*/
-
-/*
-var urlSug = "/api/users";   
-app.get(urlSug, function (req, res) {
-    var sqlString = "SELECT * FROM users";
-
-    connection.query(sqlString,
-        function (err, rows, fields) {
-            if (err) {
-                console.log(err);
-            }
-            req.body.match = rows;
-            console.log('The reponse is: ', rows);
-        });
-
-        return req.body;
-    //console.log(req.body.first_name);
-   // console.log(req.body.post);
-});
-*/
-
-var urlGetUser = "/api/users";  
+var urlGetUser = "/api/allposts";
 app.get(urlGetUser, (req, res) => {
-    var sqlString = "SELECT name FROM users";
+    var sqlString = "SELECT * FROM blogs";
     connection.query(sqlString,
         function (err, rows, fields) {
             if (err) {
@@ -182,8 +144,30 @@ app.get(urlGetUser, (req, res) => {
             console.log('The reponse is: ', rows);
             var jString = JSON.stringify(rows);
 
-            //res.send({ traitsRows: rows });
-            //res.json({ traitsRows: rows });
+            res.send(rows);
+        });
+});
+
+/*---------------------------------------------------------------------------*/
+
+//                  CODE FOR USERS
+
+/*---------------------------------------------------------------------------*/
+
+var urlGetUser = "/api/users";
+app.get(urlGetUser, (req, res) => {
+    var name = req.body.currentUser;
+    var sqlString = "SELECT concat(first_name, '   +   ', email) FROM account";
+    //var query = mysql.format(sqlString, name);
+    connection.query(sqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log('The reponse is: ', rows);
+            var jString = JSON.stringify(rows);
+
             res.send(JSON.parse(jString));
         });
 });
@@ -198,31 +182,3 @@ app.get(urlGetUser, (req, res) => {
 app.listen(PORT, () => {
     console.log('App running on port ' + PORT);
 });
-
-/**
-connection.connect(function(err){
-    (err)? console.log(err): console.log(connection);
-});
-**/
-
-/**/
-
-/*connection.connect();
-
-var sqlString = "SELECT * FROM account";
-//var sqlString = "SELECT * FROM traits";
-//var sqlString = "UPDATE traits SET ...";
-connection.query(sqlString,
-    function (err, rows, fields) {
-        if (err) {
-            console.log(err);
-        }
-
-        console.log('The reponse is: ', rows);
-    });
-
-connection.end(); */
-/**/
-
-//require('./routes.js')(app);
-//module.exports = connection;

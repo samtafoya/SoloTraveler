@@ -11,30 +11,103 @@ class Blog extends React.Component {
       textAreaVal: "",
       isVisible: false,
       postList: [],
+      userList: [],
+      nameList: [],
+      bodyList: [],
+      allList: [],
       count: 0
     }
   }
 
-  // event handler implementation
-  componentDidMount() {
-    console.log("calling this.callApi()");
-    this.callApi()
-      .then(res => this.setState({ textAreaVal: res.express }))
-      .catch(err => console.log(err));
-  }
+  // Implementation of displaying data always function
 
-  // Implementation of the "callApi" function called above
+  componentDidMount() {
+    // console.log("Inside Suggest.handleSubmit")
+    //e.preventDefault();
+
+    this.callApi()
+      .then(res => {
+        console.log("Hello: Inside 'handleSubmit.then'");
+
+        let result = "";
+        let resultList, userArr, nameArr, bodyArr = [];
+        let testList = Object.values(res);
+        console.log(Object.values(res[0]));
+        console.log(testList);
+        //debugger;
+
+        userArr = [];
+        nameArr = [];
+        bodyArr = [];
+        for (var i in res) {
+          let tempAllArr = [];
+          tempAllArr = Object.values(res[i]);
+          userArr.push(tempAllArr[0]);
+          nameArr.push(tempAllArr[1]);
+          bodyArr.push(tempAllArr[2]);
+        }
+
+        let nList = [];
+        for (var i in userArr) {
+          nList = this.state.allList.concat(
+            <div key={i} >
+              <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="ml-2">
+                      <div class="h5 m-0">{userArr[i]}</div>
+                      <div class="h7 text-muted">{nameArr[i]}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text">{bodyArr[i]}</p>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+                <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+                <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+              </div>
+            </div>);
+          this.setState({ allList: nList });
+        }
+
+        /*
+        this.setState({userList: userArr});
+        this.setState({nameList: nameArr});
+        this.setState({bodyList: bodyArr});
+        */
+
+
+
+        this.setState({ allList: nList });
+
+        console.log(userArr.length);
+        console.log(nameArr);
+        console.log(bodyArr);
+        // debugger;
+      })
+      .catch(err => {
+        console.log("Hello: Inside 'handleSubmit.catch'")
+        console.log(err);
+      });
+  };
+
+  // Implementation of the "callApi" function
   callApi = async () => {
     console.log("inside callApi()");
-    var urlGetBlog = "/api/blog";
-    const response = await fetch(urlGetBlog);
-    const body = await response.json();
-    var test = JSON.parse(body);
-    if (response.status === 200) {
+
+    var urlGetUsers = "/api/allposts";
+    const responseT = await fetch(urlGetUsers);
+    const body = await responseT.json();
+    //debugger;
+    if (responseT.status === 200) {
       console.log("callApi() succeeded");
     }
     else {
-      var errMsg = "ERROR: callApi() failed: (response.status===" + response.status + ") " + body.message;
+      console.log("callApi() failed");
+      var errMsg = "ERROR: callApi() failed: (response.status===" + responseT.status + ") " + body.message;
       throw Error(errMsg);
     }
     return body;
@@ -42,52 +115,57 @@ class Blog extends React.Component {
 
   // Implementation of the postback for the submit button click
   handleSubmit = async e => {
+    console.log("Inside Blog.handleSubmit")
     e.preventDefault();
 
-    var submitUrl = "/api/blog";
-    const response = await fetch(submitUrl, {
-      method: 'POST',
+    if (localStorage.getItem('isLoggedin')) {
 
-      // need these headers for post
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      var submitUrl = "/api/blog";
+      const response = await fetch(submitUrl, {
+        method: 'POST',
 
-      // maybe add these to an array and then call each index
-      // thing entered in the form
-      body: JSON.stringify({ blogText: this.state.textAreaVal }),
-      //body: JSON.stringify({first_name: this.state.first_name}),
-    });
+        // need these headers for post
+        headers: {
+          'Content-Type': 'application/json',
+        },
 
-    this.setState({ blogText: this.state.textAreaVal });
+        body: JSON.stringify({ blogText: this.state.textAreaVal }),
+      });
 
-    const body = await response.text();
+      this.setState({ blogText: this.state.textAreaVal });
 
-    this.setState({ blogText: this.state.textAreaVal });
+      const body = await response.text();
 
-    // fix key, count isnt working
-    let newList = this.state.postList.concat(
-      <div key={this.state.count} >
-        <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
+      this.setState({ blogText: this.state.textAreaVal });
+
+      // fix key, count isnt working
+      let newList = this.state.postList.concat(
+        <div key={this.state.count} >
+          <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="ml-2">
-                <div class="h5 m-0">@samtafoya</div>
-                <div class="h7 text-muted">Sammi Tafoya</div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="ml-2">
+                  <div class="h5 m-0">{localStorage.getItem('emailVal')}</div>
+                  <div class="h7 text-muted">{localStorage.getItem('nameVal')}</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p class="card-text">{this.state.textAreaVal}</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-          <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-          <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-        </div>
-      </div>);
-    this.setState({ postList: newList });
+          <div class="card-body">
+            <p class="card-text">{this.state.textAreaVal}</p>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+            <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+            <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+          </div>
+        </div>);
+      this.setState({ postList: newList });
+
+    } else {
+      console.alert("You are not logged in yet!");
+    }
+
   };
 
   // updates the blog post
@@ -98,6 +176,7 @@ class Blog extends React.Component {
     this.setState({ count: 1 });
   }
 
+  /*
   // submits the post
   publishPost = () => {
     this.setState({ blogText: this.state.textAreaVal });
@@ -111,7 +190,7 @@ class Blog extends React.Component {
             <div class="d-flex justify-content-between align-items-center">
               <div class="ml-2">
                 <div class="h5 m-0">@samtafoya</div>
-                <div class="h7 text-muted">Sammi Tafoya</div>
+                <div class="h7 text-muted">{localStorage.getItem('nameVal')}</div>
               </div>
             </div>
           </div>
@@ -127,12 +206,14 @@ class Blog extends React.Component {
       </div>);
     this.setState({ postList: newList });
   }
+  */
 
   render() {
 
     // figure out how to keep them on there, learn to pull from db on refresh
 
     const postList = this.state.postList;
+    const allList = this.state.allList;
 
     return (
       <div>
@@ -167,7 +248,8 @@ class Blog extends React.Component {
           </div>
         </div>
 
-        {postList}
+        {postList.reverse()}
+        {allList}
 
       </div>
     );

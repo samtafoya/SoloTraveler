@@ -6,8 +6,11 @@ class Suggest extends Component {
         super();
         this.state = {
             someVal: 123,
+            currentUser: '',
             userList: [],
+            userToPrint: []
         };
+        this.findUser = this.findUser.bind(this);
     }
 
     // Implementation of the "callApi" function called above
@@ -46,10 +49,13 @@ class Suggest extends Component {
                     let front = result.indexOf(":") + 2;
                     let back = result.length - 2;
                     let newSub = result.substring(front, back);
-                    resultList.push(newSub + "\n");
+                    resultList.push(newSub + "\n      ");
                 }
 
                 this.setState({ userList: resultList });
+                console.log(resultList[0]);
+                //debugger;
+                this.findUser();
             })
             .catch(err => {
                 console.log("Hello: Inside 'handleSubmit.catch'")
@@ -57,8 +63,31 @@ class Suggest extends Component {
             });
     };
 
+    findUser = () => {
+        console.log("in find user");
+
+        let testName = localStorage.getItem('nameVal');
+        let printArr = [];
+
+        for (var i in this.state.userList) {
+            let curName = this.state.userList[i].trim();
+            if (curName !== testName) {
+                console.log("they are different");
+                printArr.push(curName);
+            } else {
+                console.log("they are the same");
+            }
+        }
+        this.setState({ userToPrint: printArr });
+    }
+
+    findTrait = () => {
+
+    }
+
     render() {
-        let newList = this.state.userList;
+
+        let newList = this.state.userToPrint;
         return (<div>
             <button onClick={this.handleSubmit}>get users</button>
             <p> Here is a list of similar users:  </p>
@@ -67,6 +96,7 @@ class Suggest extends Component {
                     return (<p key={idx}>{u}</p>)
                 })}
             </div>
+            <button onClick={this.getLocal}>Get</button>
         </div>)
     }
 

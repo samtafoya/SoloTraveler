@@ -9,6 +9,7 @@ class App extends Component {
       response: '',
       post: '',
       responseToPost: '',
+      isLoggedin: false
     };
   }
   
