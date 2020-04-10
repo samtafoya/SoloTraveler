@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '/Users/sammitafoya/SoloTraveler/src/css/text.css'
+//import '/Users/sammitafoya/SoloTraveler/src/css/text.css'
 
 class Blog extends React.Component {
 

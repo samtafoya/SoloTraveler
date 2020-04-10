@@ -9,13 +9,18 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 const connection = mysql.createConnection({
-    host: 'localhost',
+    //host: 'localhost',
+    host: 'https://solotraveler.herokuapp.com/',
     user: 'root',
     password: 'password',
     //password: 'root',
     database: 'solotravelertest',
     //insecureAuth : true,
 });
+
+app.use(express.static(`${__dirname}/../build`));
+const path = require('path');
+app.get('*', (req, res) => { res.sendFile(path.join(__dirname, '../build/index.html')); })
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());

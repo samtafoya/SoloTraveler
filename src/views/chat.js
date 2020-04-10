@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Launcher } from 'react-chat-window'
-import 'react-chatbox-component/dist/style.css';
+//import 'react-chatbox-component/dist/style.css';
 import { ChatBox } from 'react-chatbox-component';
 
 /*class Chat extends Component {

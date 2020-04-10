@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '/Users/sammitafoya/SoloTraveler/src/css/styles.css'
+//import '/Users/sammitafoya/SoloTraveler/src/css/styles.css'
 import Suggest from './suggest';
 
 class ValidatedLoginForm extends Component {
