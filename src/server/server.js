@@ -18,6 +18,10 @@ const connection = mysql.createConnection({
     //insecureAuth : true,
 });
 
+app.use(express.static(`${__dirname}/../build`));
+const path = require('path');
+app.get('*', (req, res) => { res.sendFile(path.join(__dirname, '../build/index.html')); })
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
