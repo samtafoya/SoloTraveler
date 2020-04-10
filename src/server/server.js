@@ -45,8 +45,8 @@ app.post(urlGetLogin, function (req, res) {
 
     console.log(pass_word);
 
-    var sql = 'INSERT INTO account (email, pass_word, first_name, last_name, age, loggedin) VALUES (?)';
-    var values = [email, pass_word, req.body.first_name, req.body.last_name, req.body.age, true];
+    var sql = 'INSERT INTO account (email, pass_word, first_name, last_name, age, main_trait) VALUES (?)';
+    var values = [email, pass_word, req.body.first_name, req.body.last_name, req.body.age, req.body.trait];
 
     // Do a MySQL query for email.
     var query = mysql.format(sql, [values]);
@@ -112,11 +112,18 @@ app.post(urlGetBlog, function (req, res) {
 
     // Get sent data.
     var blog = req.body.blogText;
+    var nameV = req.body.nameV;
+    var userV = req.body.userV;
 
-    // figure out how to determine if someone is logged in
+    console.log("user " + userV + " name " + nameV + " blog " + blog);
 
     // Do a MySQL query.
-    var query = mysql.format('INSERT INTO blogs VALUES ("user", "name5", ?)', blog);
+    var sqlStr = 'INSERT INTO blogs (user, name, body) VALUES (?)';
+    var values = [userV, nameV, blog];
+
+    console.log("vals " + values[0]);
+
+    var query = mysql.format(sqlStr, [values]);
 
     //var test = mysql.format('INSERT INTO account (id, first_name) SET ?, ?', user, user);
 
@@ -169,7 +176,26 @@ app.get(urlGetUser, (req, res) => {
             var jString = JSON.stringify(rows);
 
             res.send(JSON.parse(jString));
-        });
+        }
+    );
+});
+
+var urlGetUser = "/api/usersTraits";
+app.get(urlGetUser, (req, res) => {
+    var twoSqlString =  "SELECT main_trait FROM account"
+
+    connection.query(twoSqlString,
+        function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log('2 The reponse is: ', rows);
+            var jString = JSON.stringify(rows);
+
+            res.send(JSON.parse(jString));
+        }
+    );
 });
 
 /*---------------------------------------------------------------------------*/

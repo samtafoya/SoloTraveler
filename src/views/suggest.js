@@ -8,7 +8,8 @@ class Suggest extends Component {
             someVal: 123,
             currentUser: '',
             userList: [],
-            userToPrint: []
+            userToPrint: [],
+            traitList: []
         };
         this.findUser = this.findUser.bind(this);
     }
@@ -32,6 +33,24 @@ class Suggest extends Component {
         return body;
     };
 
+    callApiTwo = async () => {
+        console.log("inside callApiTwo()");
+
+        var urlGetUsers = "/api/usersTraits";
+        const responseT = await fetch(urlGetUsers);
+        const body = await responseT.json();
+        //debugger;
+        if (responseT.status === 200) {
+            console.log("callApiTwo() succeeded");
+        }
+        else {
+            console.log("callApiTwo() failed");
+            var errMsg = "ERROR: callApi() failed: (response.status===" + responseT.status + ") " + body.message;
+            throw Error(errMsg);
+        }
+        return body;
+    }
+
     // Implementation of the postback for the submit button click
     handleSubmit = async e => {
         console.log("Inside Suggest.handleSubmit")
@@ -53,7 +72,34 @@ class Suggest extends Component {
                 }
 
                 this.setState({ userList: resultList });
-                console.log(resultList[0]);
+                console.log(this.state.userList[0]);
+                //debugger;
+                //this.findUser();
+            })
+            .catch(err => {
+                console.log("Hello: Inside 'handleSubmit.catch'")
+                console.log(err);
+            });
+
+        this.callApiTwo()
+            .then(res => {
+                console.log("Hello: Inside 'handleSubmitTwo.then'");
+
+                let result = "";
+                let resultList = [];
+
+                for (var i in res) {
+                    result = JSON.stringify(res[i]);
+                    let front = result.indexOf(":") + 2;
+                    let back = result.length - 2;
+                    let newSub = result.substring(front, back);
+                    resultList.push(newSub + "\n      ");
+                }
+
+                console.log("test " + resultList[0]);
+
+                this.setState({ traitList: resultList });
+                //console.log(this.state.userList[0]);
                 //debugger;
                 this.findUser();
             })
@@ -66,13 +112,24 @@ class Suggest extends Component {
     findUser = () => {
         console.log("in find user");
 
-        let testName = localStorage.getItem('nameVal');
+        let testName = localStorage.getItem('traitVal');
         let printArr = [];
+
+        console.log("trait list " + this.state.traitList[1] + " trait " + testName);
+        console.log("user list " + this.state.userList[0]);
+
+      //  console.log(localStorage.getItem('traitVal'));
+
+      if (this.state.traitList[1].trim() === testName) {
+          console.log("yessir");
+      } else {
+          console.log(testName.indexOf(this.state.traitList[1]));
+      }
 
         for (var i in this.state.userList) {
             let curName = this.state.userList[i].trim();
-            if (curName !== testName) {
-                console.log("they are different");
+            if (this.state.traitList[i].trim() === testName) {
+                console.log("they are the same trait + " + curName + "  " + testName);
                 printArr.push(curName);
             } else {
                 console.log("they are the same");

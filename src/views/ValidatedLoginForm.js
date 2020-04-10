@@ -19,7 +19,7 @@ class ValidatedLoginForm extends Component {
       success: '',
       isLoggedin: false,
       currentUser: '',
-      thelma: 'cat'
+      trait: ''
     };
   }
 
@@ -70,7 +70,8 @@ class ValidatedLoginForm extends Component {
         pass: this.state.pass,
         first_name: this.state.first_name,
         last_name: this.state.last_name,
-        age: this.state.age
+        age: this.state.age,
+        trait: this.state.trait
       };
 
       const response = await fetch(submitUrl, {
@@ -123,6 +124,7 @@ class ValidatedLoginForm extends Component {
     localStorage.setItem('nameVal', this.state.first_name + " " + this.state.last_name);
     localStorage.setItem('isLoggedin', "true");
     localStorage.setItem('emailVal', this.state.post);
+    localStorage.setItem('traitVal', this.state.trait);
     console.log(localStorage.getItem('isLoggedin'));
     console.log(localStorage.getItem('nameVal'));
   }
@@ -142,6 +144,9 @@ class ValidatedLoginForm extends Component {
           <input type="text" placeholder="Age" value={this.state.age} onChange={e => this.setState({ age: e.target.value })} />
           <input type="email" placeholder="email" value={this.state.post} onChange={e => this.setState({ post: e.target.value })} />
           <input type="text" placeholder="password" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
+          <p><strong>Pick a word you relate to the most! (exactly as shown to help with matching)</strong></p>
+          <p>Hiking, Swimming, Biking, Socializing, Relaxing, Alone, Beaches, Mountains, City</p>
+          <input type="text" placeholder="trait" value={this.state.trait} onChange={e => this.setState({ trait: e.target.value })} />
           <button type="submit">login</button>
         </form>
         

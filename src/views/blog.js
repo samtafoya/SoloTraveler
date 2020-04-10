@@ -15,7 +15,9 @@ class Blog extends React.Component {
       nameList: [],
       bodyList: [],
       allList: [],
-      count: 0
+      count: 0,
+      userV: "",
+      nameV: ""
     }
   }
 
@@ -118,9 +120,18 @@ class Blog extends React.Component {
     console.log("Inside Blog.handleSubmit")
     e.preventDefault();
 
+    //debugger;
+
     if (localStorage.getItem('isLoggedin')) {
 
       var submitUrl = "/api/blog";
+
+      var data = {
+        blogText: this.state.blogText,
+        userV: localStorage.getItem('emailVal'),
+        nameV: localStorage.getItem('nameVal')
+      };
+
       const response = await fetch(submitUrl, {
         method: 'POST',
 
@@ -129,7 +140,7 @@ class Blog extends React.Component {
           'Content-Type': 'application/json',
         },
 
-        body: JSON.stringify({ blogText: this.state.textAreaVal }),
+        body: JSON.stringify(data),
       });
 
       this.setState({ blogText: this.state.textAreaVal });
@@ -160,7 +171,12 @@ class Blog extends React.Component {
             <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
           </div>
         </div>);
+
       this.setState({ postList: newList });
+
+      this.setState({ userV: localStorage.getItem('emailVal') });
+      this.setState({ nameV: localStorage.getItem('nameVal') });
+      console.log("HEY " + this.state.userV);
 
     } else {
       console.alert("You are not logged in yet!");
