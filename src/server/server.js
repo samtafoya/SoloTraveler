@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 const connection = mysql.createConnection({
-    host: 'localhost',
+    //host: 'localhost',
+    host: 'https://solotraveler.herokuapp.com/',
     user: 'root',
     password: 'password',
     //password: 'root',
